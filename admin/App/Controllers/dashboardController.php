@@ -2,17 +2,17 @@
 namespace Controllers;
 use Core\Controller;
 
-class homeController extends Controller{
+class dashboardController extends Controller{
     private $modulo_ativo;
 
     public function __construct(){
-        $this->modulo_ativo = 'home';
+        $this->modulo_ativo = 'dashboard';
     }
 
     public function index(){
         $data['moduloAtivo']=$this->modulo_ativo;
-        $data['texto']='Home';
-        $this->loadTemplate($this->modulo_ativo.'/visaoGeral',$data);
+        $data['telaAtual']='visaogeral';
+        $this->loadTemplate($this->modulo_ativo.'/'.$data['telaAtual'],$data);
     }
 
 

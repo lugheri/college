@@ -14,7 +14,7 @@ if(ENVIRONMENT == 'development')://Dados do ambiente de desenvolvimento
     define("NOCACHE",date("hms"));
 
     //Configuracao do banco de dados
-    $config['dbname'] = 'otraderq_traderx';
+    $config['dbname'] = 'traderx';
 	$config['host'] = 'localhost';
 	$config['dbuser'] = 'root';
 	$config['dbpass'] = '';

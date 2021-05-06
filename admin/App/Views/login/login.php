@@ -21,7 +21,7 @@
         <link rel="icon" href="<?= PUBLIC_PATH?>img/ico_32.png" sizes="32x32">
         <link rel="icon" href="<?= PUBLIC_PATH?>img/ico.png" sizes="192x192">
 
-        <title>TRADE X ADM | Autenticação</title>
+        <title>TRADEX ADM | Autenticação</title>
 
 
     </head>
@@ -76,7 +76,7 @@
                     </form>
                     <?php if($error):?>                        
                             <p class="alert-error"><i class="fas fa-exclamation"></i> Usuário e/ou Senha inválido(s)!</p>   
-                            <?= $error ?>
+                          
                         <?php endif;?>
                     <br/>
                     <div class="row">

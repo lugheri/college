@@ -9,6 +9,8 @@ class Core{
             $url.= $_GET['url'];
         }
 
+        
+
         //Routers
         $url = $this->checkRoutes($url);
 
@@ -32,11 +34,13 @@ class Core{
                 $params = $url;
             }
         }else{
-            $currentController = 'homeController';
+            $currentController = 'dashboardController';
             $currentAction = 'index';
         }
 
         $prefix = 'Controllers\\';
+
+      
 
         if(!file_exists('App/Controllers/'.$currentController.'.php') || !method_exists($prefix.$currentController, $currentAction)){
             $currentController = 'notFoundController';

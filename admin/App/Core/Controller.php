@@ -2,6 +2,7 @@
 namespace Core;
 use Core\Models;
 use Models\Usuarios;
+use Models\Modules;
 
 class Controller{
 
@@ -17,12 +18,22 @@ class Controller{
 
     public function loadTemplate($viewName,$viewData = array()){
         extract($viewData);
+        //Dados do usuário
+        $infoUser=$this->dataUser();
+     
+        //modulos do sistema
+        $m = new Modules();
+        //Listagem dos modulos disponíveis para side bar e barra de navegacao
+        $modulos=$m->modules('side');
+
         include 'App/Views/loadTemplate.php';
     }
 
     public function loadViewInTemplate($viewName,$viewData = array()){
         extract($viewData);
-        $infoUser=$this->dataUser();
+
+     
+        
         include 'App/Views/'.$viewName.'.php';
     }
 
@@ -35,7 +46,25 @@ class Controller{
         define('USER_ID',$dataUser[1]);
         define('USER_NAME',$dataUser[2]);
         define('USER_MAIL',$dataUser[3]);
-
     }
+
+    public function telasModulo($idModule){
+        $m = new Modules();
+        return $m->telasModulo($idModule);
+    }
+
+    
+    public function tituloModulo($modulo){
+        $m = new Modules();
+        return $m->tituloModulo($modulo);
+    }
+
+    public function infoTela($tela){
+        $m = new Modules();
+        return $m->infoTela($tela);
+    }
+
+    
+    
 
 }
