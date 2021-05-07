@@ -5,29 +5,33 @@
    
     ?>
 
-    <div class="container-fluid">
+    <div class="container-fluid conteudo">
         <!-- start page title -->
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title-box">
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Administração</a></li>
-                            
-                            <li class="breadcrumb-item"><a href="javascript: void(0);"><?= $modulo?></a></li>
-                            <li class="breadcrumb-item active"><?= $tela['nome']?></li>
-                        </ol>
+        <?php if(!empty($tela['nome'])):?>
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Administração</a></li>
+                                
+                                <li class="breadcrumb-item"><a href="javascript: void(0);"><?= $modulo?></a></li>
+                                <li class="breadcrumb-item active"><?= $tela['nome']?></li>
+                            </ol>
+                        </div>
+                        <p class="h4 page-title">
+                            <?= $tela['nome']?><br/>
+                            <small><?= $tela['descricao']?></small>
+                        </p>
+                        
                     </div>
-                    <p class="h4 page-title">
-                        <?= $tela['nome']?><br/>
-                        <small><?= $tela['descricao']?></small>
-                    </p>
-                    
                 </div>
-            </div>
-        </div>   
-        <br/>  
+            </div>   
+            <br/> 
+        <?php endif;?> 
         <!-- end page title --> 
-        <?php $this->loadViewInTemplate($viewName,$viewData);?>  
+        <div id='conteudo'>
+            <?php $this->loadViewInTemplate($viewName,$viewData);?>  
+        </div>
     </div>
 </div>

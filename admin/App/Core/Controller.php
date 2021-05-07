@@ -3,6 +3,7 @@ namespace Core;
 use Core\Models;
 use Models\Usuarios;
 use Models\Modules;
+use Models\Biblioteca;
 
 class Controller{
 
@@ -30,9 +31,7 @@ class Controller{
     }
 
     public function loadViewInTemplate($viewName,$viewData = array()){
-        extract($viewData);
-
-     
+        extract($viewData);    
         
         include 'App/Views/'.$viewName.'.php';
     }
@@ -62,6 +61,26 @@ class Controller{
     public function infoTela($tela){
         $m = new Modules();
         return $m->infoTela($tela);
+    }
+
+    public function getImageBiblioteca($idImagem){
+        $b = new Biblioteca();
+        $link_imagem = BIBLIOTECA.$b->getImageBiblioteca($idImagem);
+        return $link_imagem;
+    }
+
+    public function resumeText($text,$limit){
+        $t=explode(" ",$text);
+        if(count($t) > $limit):
+            $smallText="";
+            for($i=0;$i < $limit;++$i):
+                $smallText.=$t[$i]." ";
+            endfor;
+            $smallText.='...';
+            return $smallText;
+        endif;
+        return $text;
+
     }
 
     

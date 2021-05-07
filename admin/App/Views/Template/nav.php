@@ -6,7 +6,9 @@
                 <input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar" 
                        aria-describedby="button-search">
                 <div class="input-group-append">
-                    <button class="btn btn-danger" type="button" id="button-search"><i class="fas fa-search"></i></button>
+                    <button class="btn btn-danger" type="button" id="button-search">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
             </div>
         </form>

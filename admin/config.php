@@ -7,8 +7,10 @@ if(ENVIRONMENT == 'development')://Dados do ambiente de desenvolvimento
     $versao="v2";
     
     //Url Base
+    
     define("BASE_URL","http://".$_SERVER["HTTP_HOST"].'/traderx/'.$versao.'/admin/');
     define("BASE_URL_ALUNO","http://".$_SERVER["HTTP_HOST"].'/traderx/'.$versao.'/aluno/');
+    define("BIBLIOTECA","http://".$_SERVER["HTTP_HOST"].'/traderx/biblioteca/');
     
     //Configuracao de Cache
     define("NOCACHE",date("hms"));
@@ -23,6 +25,7 @@ elseif(ENVIRONMENT == "production"):
      //Url Base
      define("BASE_URL","https://".$_SERVER["HTTP_HOST"].'/admin/');
      define("BASE_URL_ALUNO","https://".$_SERVER["HTTP_HOST"].'/aluno/');
+     define("BIBLIOTECA","https://".$_SERVER["HTTP_HOST"].'/biblioteca/');
      
      //Configuracao de cache
      define("NOCACHE",0);
