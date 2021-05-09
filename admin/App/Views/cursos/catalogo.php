@@ -19,34 +19,34 @@
             $title=count($cursos).' Curso(s) privado(s).';
         }?>
 
-        <div <?php if($privacidade=='todos'){ echo 'class="btn btn-primary"';}else{ echo 'class="btn btn-light"';}?>
+        <div <?php if($privacidade=='todos'){ echo 'class="btn btn-sm btn-primary"';}else{ echo 'class="btn btn-sm btn-light"';}?>
             onClick="filtraCatalogo('todos','<?= $modoView?>')">
             Todos
         </div>
 
         <div class="btn-group" role="group" aria-label="filtro_catalogo">
-            <div <?php if($privacidade=='publico'){ echo 'class="btn btn-primary"';}else{ echo 'class="btn btn-light"';}?>
+            <div <?php if($privacidade=='publico'){ echo 'class="btn btn-sm btn-primary"';}else{ echo 'class="btn btn-sm btn-light"';}?>
                 onClick="filtraCatalogo('publico','<?= $modoView?>')">
                 Públicos
             </div>
-            <div <?php if($privacidade=='privado'){ echo 'class="btn btn-primary"';}else{ echo 'class="btn btn-light"';}?>
+            <div <?php if($privacidade=='privado'){ echo 'class="btn btn-sm btn-primary"';}else{ echo 'class="btn btn-sm btn-light"';}?>
                 onClick="filtraCatalogo('privado','<?= $modoView?>')">
                 Privados
             </div>
         </div>
 
         <div class="btn-group" role="group" aria-label="modoView_catalogo">
-            <div <?php if($modoView=='card'){ echo 'class="btn btn-primary"';}else{ echo 'class="btn btn-light"';}?>
+            <div <?php if($modoView=='card'){ echo 'class="btn btn-sm btn-primary"';}else{ echo 'class="btn btn-sm btn-light"';}?>
                 onClick="filtraCatalogo('<?= $privacidade?>','card')">
                 <i class="fas fa-th"></i>
             </div>
-            <div <?php if($modoView=='list'){ echo 'class="btn btn-primary"';}else{ echo 'class="btn btn-light"';}?>
+            <div <?php if($modoView=='list'){ echo 'class="btn btn-sm btn-primary"';}else{ echo 'class="btn btn-sm btn-light"';}?>
                 onClick="filtraCatalogo('<?= $privacidade?>','list')">
                 <i class="fas fa-th-list"></i>
             </div>
         </div>
 
-        <a class="btn btn-outline-danger" title="Lixeira" href="<?= BASE_URL?>cursos/lixeira">
+        <a class="btn btn-sm btn-outline-danger" title="Lixeira" href="<?= BASE_URL?>cursos/lixeira">
             <i class="fas fa-trash-alt"></i>
         </a>
 
@@ -60,7 +60,7 @@
     </div>
 </div>
 <br/>
-<div class="row">     
+<div class="row align-items-center">     
     <?php    
   
     if($modoView=='card'):
@@ -72,6 +72,11 @@
                     <?php 
                     if($c['capa']):?>
                         <img src="<?= $this->getImageBiblioteca($c['capa'])?>" class="card-img-top" alt="Capa do curso">
+                    <?php else:?>
+                        <div class="card-header text-center" style="padding:100px 0px; background:#ccc">
+                            <i class="h1 fas fa-camera"></i>
+                            <p class="h5">Sem Capa</p>
+                        </div>
                     <?php endif;?>
                     
                     <div class="card-body card-curso">
@@ -117,13 +122,18 @@
             $linkCurso = base64_encode($c['id'].':curso');?>
             <div class="col-12">
                 <div class="card"> 
-                    <div class="row no-gutters">                   
-                        <?php 
-                        if($c['capa']):?>
-                            <div class="col-md-2">
+                    <div class="row no-gutters align-items-center">  
+                        <?php if($c['capa']):?>
+                            <div class="col-md-2"> 
                                 <img src="<?= $this->getImageBiblioteca($c['capa'])?>" class="card-img-top" alt="Capa do curso">
                             </div>
+                        <?php else:?>
+                            <div class="col-md-2 text-center" style="border-right:1px solid #ccc"> 
+                                    <i class="h1 fas fa-camera"></i>
+                                    <p class="h5">Sem Capa</p>
+                            </div>
                         <?php endif;?>
+                        
                         <div class="col">
                             <div class="card-body fcard-curso">
                                 <?php if($c['publico']):?>

@@ -62,6 +62,141 @@ class Cursos extends Model{
         }
     }
 
+    public function aulaMelhorAvaliada($idCurso){
+        $sql = $this->db->prepare("SELECT idAula, AVG(nota) AS `media`
+                                     FROM `aulas_assistidas`
+                                    WHERE idCurso=:idCurso
+                                      AND nota is not NULL
+                                 GROUP BY idAula
+                                 ORDER BY media DESC
+                                 LIMIT 1");
+        $sql->bindValue(":idCurso",$idCurso);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+        }else{
+            return $sql->fetch();
+        }
+    }
+
+    public function melhorProfessor($idCurso){
+        $sql = $this->db->prepare("SELECT ca.idProfessor, AVG(aa.nota) AS `media`
+                                     FROM `cursos_aulas` AS ca
+                                     JOIN `aulas_assistidas` AS aa
+                                       ON ca.id=aa.idAula
+                                    WHERE nota is not null
+                                      AND ca.idProfessor >0
+                                      AND ca.idCurso=:idCurso
+                                 GROUP BY ca.idProfessor
+                                 ORDER BY media DESC
+                                    LIMIT 1");
+        $sql->bindValue(":idCurso",$idCurso);
+        if($sql->execute()===false):
+           $error=$sql->errorInfo();
+           print  '<small class="text-danger"><i class="fas fa-times"></i>"'.$error[2].'"</small><br/>';
+           return false;
+        else:
+            return $sql->fetch();
+        endif;
+    }
+
+    public function qtdAvaliacoesPorAlunos($idCurso){
+        $sql = $this->db->prepare("SELECT COUNT(DISTINCT idAluno) AS alunos
+                                     FROM `aulas_assistidas`
+                                    WHERE nota is not null
+                                      AND idCurso=:idCurso");
+        $sql->bindValue(":idCurso",$idCurso);
+        if($sql->execute()===false):
+           $error=$sql->errorInfo();
+           print  '<small class="text-danger"><i class="fas fa-times"></i>"'.$error[2].'"</small><br/>';
+           return false;
+        else:
+            $rs=$sql->fetch();
+            return $rs['alunos'];
+        endif;
+    }
+
+    public function qtdAvaliacoes($idCurso){
+        $sql = $this->db->prepare("SELECT COUNT(id) AS avaliacoes
+                                     FROM `aulas_assistidas`
+                                    WHERE nota is not null
+                                      AND idCurso=:idCurso");
+        $sql->bindValue(":idCurso",$idCurso);
+        if($sql->execute()===false):
+           $error=$sql->errorInfo();
+           print  '<small class="text-danger"><i class="fas fa-times"></i>"'.$error[2].'"</small><br/>';
+           return false;
+        else:
+            $rs=$sql->fetch();
+            return $rs['avaliacoes'];
+        endif;
+    }
+
+    public function totalAlunosCurso($idCurso){
+        $sql = $this->db->prepare("SELECT COUNT(DISTINCT idAluno) AS alunos
+                                     FROM `alunos_cursos`
+                                    WHERE `status`=1
+                                      AND idCurso=:idCurso");
+        $sql->bindValue(":idCurso",$idCurso);
+        if($sql->execute()===false):
+            $error=$sql->errorInfo();
+            print  '<small class="text-danger"><i class="fas fa-times"></i>"'.$error[2].'"</small><br/>';
+            return false;
+        else:
+            $rs=$sql->fetch();
+            return $rs['alunos'];
+        endif;
+    }
+
+    public function totalProfessoresCurso($idCurso){
+        $sql = $this->db->prepare("SELECT COUNT(DISTINCT idProfessor) AS professores
+                                     FROM `cursos_aulas`
+                                    WHERE `status`=1
+                                      AND idCurso=:idCurso");
+        $sql->bindValue(":idCurso",$idCurso);
+        if($sql->execute()===false):
+            $error=$sql->errorInfo();
+            print  '<small class="text-danger"><i class="fas fa-times"></i>"'.$error[2].'"</small><br/>';
+            return false;
+        else:
+            $rs=$sql->fetch();
+            return $rs['professores'];
+        endif;
+    }
+
+    public function totalModulosCurso($idCurso){
+        $sql = $this->db->prepare("SELECT COUNT(id) AS modulos
+                                     FROM `cursos_modulos`
+                                    WHERE `status`=1
+                                      AND idCurso=:idCurso");
+        $sql->bindValue(":idCurso",$idCurso);
+        if($sql->execute()===false):
+            $error=$sql->errorInfo();
+            print  '<small class="text-danger"><i class="fas fa-times"></i>"'.$error[2].'"</small><br/>';
+            return false;
+        else:
+            $rs=$sql->fetch();
+            return $rs['modulos'];
+        endif;
+    }
+
+    public function totalAulasCurso($idCurso){
+        $sql = $this->db->prepare("SELECT COUNT(id) AS aulas
+                                     FROM `cursos_aulas`
+                                    WHERE `status`=1
+                                      AND idCurso=:idCurso");
+        $sql->bindValue(":idCurso",$idCurso);
+        if($sql->execute()===false):
+            $error=$sql->errorInfo();
+            print  '<small class="text-danger"><i class="fas fa-times"></i>"'.$error[2].'"</small><br/>';
+            return false;
+        else:
+            $rs=$sql->fetch();
+            return $rs['aulas'];
+        endif;
+    }
+
+
     public function criarCurso($dados){
         if($dados['faseAtual']==0){//Cadastra atualizacoes
             $sql = $this->db->prepare("INSERT INTO `cursos` 
@@ -136,6 +271,130 @@ class Cursos extends Model{
             echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
         }else{
             return $sql->fetch();
+        }
+    }
+
+    public function salvarAlteracoesCurso($dados){
+        $sql = $this->db->prepare("UPDATE `cursos`
+                                      SET `capa`=:capa,
+                                          `autor`=:autor,
+                                          `nome`=:nome,
+                                          `descricao`=:descricao,
+                                          `tags`=:tags,
+                                          `concluido`=1,
+                                          `publico`=:publico
+                                    WHERE `id`=:idCurso");
+        $sql->bindValue(':capa',$dados['capa']);
+        $sql->bindValue(':autor',$dados['autor']);
+        $sql->bindValue(':nome',$dados['nome']);
+        $sql->bindValue(':descricao',$dados['descricao']);
+        $sql->bindValue(':tags',$dados['tags']);
+        $sql->bindValue(':publico',$dados['privacidade']);
+        $sql->bindValue(':idCurso',$dados['idCurso']);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+            return false;
+        }else{
+            return true;
+        }
+
+    }
+
+    public function removerCurso($idCurso){
+        $sql = $this->db->prepare("UPDATE `cursos` SET `status`=0 WHERE `id`=:idCurso");
+        $sql->bindValue(':idCurso',$idCurso);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function nomeCurso($idCurso){
+        $sql = $this->db->prepare("SELECT `nome` FROM `cursos` WHERE `id`=:idCurso");
+        $sql->bindValue(":idCurso",$idCurso);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+        }else{
+            $rs= $sql->fetch();
+            return $rs['nome'];
+        }
+    }
+
+    public function nomeAula($idAula){
+        $sql = $this->db->prepare("SELECT `nome` FROM `cursos_aulas` WHERE `id`=:idAula");
+        $sql->bindValue(":idAula",$idAula);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+        }else{
+            $rs= $sql->fetch();
+            return $rs['nome'];
+        }
+    }
+
+    public function modulosCurso($idCurso){
+        $sql = $this->db->prepare("SELECT * FROM `cursos_modulos` WHERE `idCurso`=:idCurso AND `status`=1  ORDER BY visibilidade DESC,  visibilidade ASC");
+        $sql->bindValue(":idCurso",$idCurso);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+        }else{
+            return $sql->fetchAll();
+        }
+    }
+
+    public function criarModulo($dados){
+        //Calculando a ordem do ultimo cursos
+        $sql=$this->db->prepare("SELECT `ordem` FROM `cursos_modulos` WHERE `status`=1 ORDER BY `id` DESC");
+        $sql->execute();
+        $rs=$sql->fetch();
+        $ordem=$rs['ordem']++;
+        
+        $sql = $this->db->prepare("INSERT INTO `cursos_modulos` 
+                                              (`idCurso`,`tipo_modulo`,`modulo`,`descricao`,`ordem`,`visibilidade`,`status`)
+                                       VALUES (:idCurso,:tipo,:modulo,:descricao,:ordem,:visibilidade,1)");
+        $sql->bindValue(":idCurso",$dados['idCurso']);
+        $sql->bindValue(":tipo",$dados['tipo']);
+        $sql->bindValue(":modulo",$dados['nome']);
+        $sql->bindValue(":descricao",$dados['descricao']);
+        $sql->bindValue(":ordem",$ordem);
+        $sql->bindValue(":visibilidade",$dados['visibilidade']);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+         }else{
+            return $this->db->lastInsertId();
+         }
+    }
+
+    public function infoModulo($idModulo){
+        $sql = $this->db->prepare("SELECT * FROM `cursos_modulos` WHERE `id`=:idModulo");
+        $sql->bindValue(":idModulo",$idModulo);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+        }else{
+            return $sql->fetch();
+        }
+    }
+
+    public function aulasModulo($idModulo){
+        $sql = $this->db->prepare("SELECT * 
+                                     FROM `cursos_aulas` 
+                                    WHERE `idModulo`=:idModulo
+                                      AND `status`=1
+                                 ORDER BY `ordem` ASC");
+        $sql->bindValue(":idModulo",$idModulo);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+        }else{
+            return $sql->fetchAll();
         }
     }
 }

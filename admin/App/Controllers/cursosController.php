@@ -1,6 +1,7 @@
 <?php namespace Controllers;
 use Core\Controller;
 use Models\Cursos;
+use Models\Professores;
 
 class cursosController extends Controller{
 
@@ -71,16 +72,118 @@ class cursosController extends Controller{
         return $c->infoCurso($idCurso);
     }
 
+    public function nomeCurso($idCurso){
+        $c = new Cursos();
+        return $c->nomeCurso($idCurso);
+    }
+    
+    public function nomeAula($idAula){
+        $c = new Cursos();
+        return $c->nomeAula($idAula);
+    }
+
+    public function nomeProfessor($idProfessor){
+        $p = new Professores();
+        return $p->nomeProfessor($idProfessor);
+    }
+
     public function editar($idCurso){
         $data['moduloAtivo']=$this->modulo_ativo;
-        $data['telaAtual']='catalogo_editarCurso';
+        $data['telaAtual']='catalogo_abrirCurso';
 
         $c = new Cursos();
         $idCurso = explode(':',base64_decode($idCurso));
         $data['infoCurso']=$c->infoCurso($idCurso[0]);
 
+        $data['modulosCurso']=$c->modulosCurso($idCurso[0]);
+
         $this->loadTemplate($this->modulo_ativo.'/'.$data['telaAtual'],$data);
 
+    }
+
+    public function estatisticasCurso(){
+        $c = new Cursos();
+        $data['infoCurso']=$c->infoCurso($_POST['idCurso']);
+        $data['media']=$c->avaliacao_curso($_POST['idCurso']);
+
+        //Aula Melhor Avaliada
+        $data['melhorAula']=$c->aulaMelhorAvaliada($_POST['idCurso']);
+        //Melhor Professor
+        $data['melhorProfessor']=$c->melhorProfessor($_POST['idCurso']);
+        //Qtd de Avaliacoes por alunos
+        $data['qtdAvaliacoes_porAluno']=$c->qtdAvaliacoesPorAlunos($_POST['idCurso']);
+        //Qtd de Avaliacoes do curso
+        $data['qtdAvaliacoes']=$c->qtdAvaliacoes($_POST['idCurso']);
+
+        //Total de alunos
+        $data['alunosCurso']=$c->totalAlunosCurso($_POST['idCurso']);
+        //Total de professores
+        $data['professoresCurso']=$c->totalProfessoresCurso($_POST['idCurso']);
+        //Total de modulos
+        $data['modulosCurso']=$c->totalModulosCurso($_POST['idCurso']);
+        //Total de aulas
+        $data['aulasCurso']=$c->totalAulasCurso($_POST['idCurso']);
+
+
+
+        $this->loadView($this->modulo_ativo.'/catalogo_estatisticasCurso',$data);
+    }
+
+    public function editarInfoCurso(){
+        $c = new Cursos();
+
+        $data['infoCurso']=$c->infoCurso($_POST['idCurso']);
+
+        $this->loadView($this->modulo_ativo.'/catalogo_editarInfoCurso',$data);
+    }
+
+    public function removerCurso(){
+        $c = new Cursos();
+        if($_POST['acao']=="perguntar"){
+            $data['infoCurso']=$c->infoCurso($_POST['idCurso']);
+            $this->loadView($this->modulo_ativo.'/catalogo_removerCurso',$data);
+            
+        }else if($_POST['acao']=="remover"){           
+            $c->removerCurso($_POST['idCurso']);
+            echo "<script>window.location.href='".BASE_URL."cursos/catalogo'</script>";
+        }
+    }
+
+    public function salvarAlteracoesCursos(){
+        $c = new Cursos();
+        $c->salvarAlteracoesCurso($_POST);
+
+        $linkCurso = base64_encode($_POST['idCurso'].':curso');
+        echo "<script>window.location.href='".BASE_URL."cursos/editar/".$linkCurso."'</script>";
+    }
+
+    public function novoModulo(){
+        $data['idCurso']=$_POST['idCurso'];
+        $data['tipo']=$_POST['tipo'];
+        
+        $this->loadView($this->modulo_ativo.'/catalogo_novoModulo',$data);        
+    }
+
+    public function criarModulo(){
+        $c = new Cursos();
+
+        $idModulo=$c->criarModulo($_POST);
+        $linkModulo= base64_encode($idModulo.':modulo'); 
+        echo "<script>window.location.href='".BASE_URL."cursos/modulo/".$linkModulo."'</script>";
+    }
+
+    public function modulo($idModulo){
+        $data['moduloAtivo']=$this->modulo_ativo;
+        $data['telaAtual']='catalogo_abrirModulo';
+
+        $c = new Cursos();
+
+        $idModulo = explode(':',base64_decode($idModulo));
+        $data['infoModulo']=$c->infoModulo($idModulo[0]);
+
+        $data['aulasModulo']=$c->aulasModulo($idModulo[0]);
+
+        $this->loadTemplate($this->modulo_ativo.'/'.$data['telaAtual'],$data);
     }
 
 }

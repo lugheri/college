@@ -42,6 +42,9 @@
                 <hr/>
                 <div class="row">
                     <div class="col-10 offset-1 text-right">
+                        <a class="btn btn-outline-secondary" href="<?= BASE_URL?>cursos/catalogo">
+                            Cancelar
+                        </a>
                         <button type="submit" class="btn btn-danger btn-lg" onClick="criarCurso()">
                             Prosseguir
                         </button>
@@ -64,7 +67,7 @@
                 </div>
                 <hr/>
                 <div class="row">
-                    <div class="col-10 offset-1 text-right">
+                    <div class="col-10 offset-1 text-right">                       
                         <button type="submit" class="btn btn-danger btn-lg" onClick="criarCurso()">
                             Prosseguir
                         </button>
@@ -83,7 +86,7 @@
                 </div>
                 <hr/>
                 <div class="row">
-                    <div class="col-10 offset-1 text-right">
+                    <div class="col-10 offset-1 text-right">                       
                         <button type="submit" class="btn btn-danger btn-lg" onClick="criarCurso()">
                             Prosseguir
                         </button>
@@ -103,7 +106,6 @@
                         <input type="text" value="<?= $infoCurso['capa']?>" name="capa" id="capa">
                     </div>                   
                 </div>
-
                 <div class="row">
                     <div class="col-10 offset-1">
                         <label for="nome">Nome<b class="text-danger" title="Campo obrigatório">*</b></label>
@@ -114,7 +116,6 @@
                         <textarea name="descricao" id="descricao" placeholder="Breve descrição do Curso" class="form-control form-control-lg"><?= $infoCurso['descricao']?></textarea>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-10 offset-1">
                         <label for="autor">Autor</label>
@@ -126,7 +127,6 @@
                     </div>
                 </div>
                 <hr/>
-
                 <div class="row">
                     <div class="col-10 offset-1 text-right">
                         <button type="submit" class="btn btn-danger btn-lg" onClick="criarCurso()">
@@ -140,8 +140,7 @@
                 <div class="col text-center">    
                     <i class="far fa-thumbs-up text-success" style="font-size:5rem"></i>
                     <p class="h4 text-muted">Curso cadastrado com sucesso!</p>                    
-                </div>
-                
+                </div>                
             </div>    
             <hr/>
             <div class="row">
@@ -162,7 +161,6 @@
                 </div>
                 
             </div>   
-        <?php endif;?>
-    
+        <?php endif;?>    
     </div>
 </div>

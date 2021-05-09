@@ -291,6 +291,10 @@ a{
     font-weight: 700;
 }
 
+.btn{
+    cursor:pointer;
+}
+
 .btn-create{
     border-radius:50px
 }
@@ -299,6 +303,20 @@ label{
     color:#98a6ad;
     font-style: italic;
     margin-top:10px;
+}
+
+.form-control {
+    border-radius:0px;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #f1f1f1;
+    border-bottom:3px solid #dc3545;
+    
+    outline: 0;
+    box-shadow:none;
 }
 
 .title{
@@ -342,6 +360,37 @@ label{
     display:flex;
     flex-direction: column;
 }
+
+.card-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height:225px;
+    flex-direction: row;   
+    cursor:pointer;
+    position: relative;
+}
+
+.card-item .card-body{
+    text-align:center;
+    margin-bottom:20px
+}
+
+.card-item i{
+    font-size: 3rem;
+}
+
+.card-item p{
+    font-size: 1rem;
+}
+
+.card-item .btn-create{
+    position:absolute;
+    bottom:10px;
+    left:10%;
+    max-width: 80%;
+}
+
 
 .dadosCurso{
     flex: 1

@@ -59,3 +59,157 @@ function criarCurso(){
 		})
 	});
 }
+
+//Estatisticas do curso
+function estatisticasCurso(idCurso){
+    $.ajax({
+        type: "POST",
+        data:{idCurso},
+        url:RAIZ+"cursos/estatisticasCurso",
+        dataType:"html",
+        success:function(result){
+            $('#content-modal').html('');
+            $('#content-modal').append(result);
+
+            //removendo outras possiveis classes de tamanho
+			$('.modal-dialog').removeClass('modal-sm');//Pequeno
+			$('.modal-dialog').removeClass('modal-lg');//Grande
+            $('.modal-dialog').removeClass('modal-xl');//Muito Grande
+            
+            $('.modal-dialog').addClass('modal-lg');
+
+            $('#modal').modal({
+				backdrop: 'static'
+			})
+
+            $('#modal').modal('show');
+        }
+    })
+}
+
+//Editar Informações do Curso
+function editarInfoCurso(idCurso){
+    $.ajax({
+        type: "POST",
+        data:{idCurso},
+        url:RAIZ+"cursos/editarInfoCurso",
+        dataType:"html",
+        success:function(result){
+            $('#content-modal').html('');
+            $('#content-modal').append(result);
+
+            //removendo outras possiveis classes de tamanho
+			$('.modal-dialog').removeClass('modal-sm');//Pequeno
+			$('.modal-dialog').removeClass('modal-lg');//Grande
+            $('.modal-dialog').removeClass('modal-xl');//Muito Grande
+            
+            $('.modal-dialog').addClass('modal-lg');
+
+            $('#modal').modal({
+				backdrop: 'static'
+			})
+
+            $('#modal').modal('show');
+        }
+    })
+}
+
+//Salvar as alterações do curso
+function salvarAlteracoesCursos(){
+    $('#form_editarCurso').on('submit', function(e){
+		e.preventDefault();
+
+		var form  = $('#form_editarCurso')['0'];
+		var data = new FormData(form);
+		$.ajax({
+			type:"POST",
+			data:data,
+			contentType:false,
+			processData:false,
+            url:RAIZ+"cursos/salvarAlteracoesCursos",
+			dataType: "html",
+			beforeSend:function(){
+				$('#conteudo').html('');	
+				$('#conteudo').append("<div class='modal-body text-center'><i class='text-info fas fa-circle-notch fa-spin'></i><p>Cadastrando Curso</p> </div>");
+			},
+            success:function(result){
+				$('#conteudo').html('');	
+				$('#conteudo').append(result);
+        	}
+			
+		})
+	});
+}
+
+//Remover curso
+function removerCurso(idCurso,acao){
+    $.ajax({
+        type: "POST",
+        data:{idCurso,acao},
+        url:RAIZ+"cursos/removerCurso",
+        dataType:"html",
+        success:function(result){
+            $('#content-modal-add').html('');
+            $('#content-modal-add').append(result);
+
+            //removendo outras possiveis classes de tamanho
+			$('.modal-dialog-add').removeClass('modal-sm');//Pequeno
+			$('.modal-dialog-add').removeClass('modal-lg');//Grande
+            $('.modal-dialog-add').removeClass('modal-xl');//Muito Grande
+            
+            $('.modal-dialog-add').addClass('modal-sm');
+
+            $('#modal-add').modal({
+				backdrop: 'static'
+			})
+
+            $('#modal-add').modal('show');
+        }
+    })
+}
+
+//Criar Módulo Curso
+function novoModulo(idCurso,tipo){
+    $.ajax({
+        type: "POST",
+        data:{idCurso,tipo},
+        url:RAIZ+"cursos/novoModulo",
+        dataType:"html",
+        success:function(result){
+            $('#content-modal').html('');
+            $('#content-modal').append(result);
+
+            //removendo outras possiveis classes de tamanho
+			$('.modal-dialog').removeClass('modal-sm');//Pequeno
+			$('.modal-dialog').removeClass('modal-lg');//Grande
+            $('.modal-dialog').removeClass('modal-xl');//Muito Grande
+            
+            $('#modal').modal({
+				backdrop: 'static'
+			})
+
+            $('#modal').modal('show');
+        }
+    })
+}
+
+function criarModulo(){
+    $('#form_novoModulo').on('submit', function(e){
+		e.preventDefault();
+
+		var form  = $('#form_novoModulo')['0'];
+		var data = new FormData(form);
+		$.ajax({
+			type:"POST",
+			data:data,
+			contentType:false,
+			processData:false,
+            url:RAIZ+"cursos/criarModulo",
+			dataType: "html",			
+            success:function(result){
+				$('#conteudo').html('');	
+				$('#conteudo').append(result);
+        	}			
+		})
+	});
+}
