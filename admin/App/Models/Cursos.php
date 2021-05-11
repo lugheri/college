@@ -383,6 +383,55 @@ class Cursos extends Model{
         }
     }
 
+    public function removerModulo($idModulo){
+        $sql = $this->db->prepare("UPDATE `cursos_modulos` SET `status`=0 WHERE `id`=:idModulo");
+        $sql->bindValue(':idModulo',$idModulo);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function salvarAlteracoesModulo($dados){
+        $sql = $this->db->prepare("UPDATE `cursos_modulos`
+                                      SET `tipo_modulo`=:tipo,
+                                          `modulo`=:nome,
+                                          `descricao`=:descricao,
+                                          `visibilidade`=:visibilidade
+                                    WHERE `id`=:idModulo");
+        $sql->bindValue(':tipo',$dados['tipo']);
+        $sql->bindValue(':nome',$dados['nome']);
+        $sql->bindValue(':descricao',$dados['descricao']);
+        $sql->bindValue(':visibilidade',$dados['visibilidade']);
+        $sql->bindValue(':idModulo',$dados['idModulo']);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function totalAulasModulo($idModulo){
+        $sql = $this->db->prepare("SELECT COUNT(id) AS total 
+                                     FROM `cursos_aulas` 
+                                    WHERE `idModulo`=:idModulo
+                                      AND `status`=1
+                                 ORDER BY `ordem` ASC");
+        $sql->bindValue(":idModulo",$idModulo);
+        if($sql->execute()===false){
+            $erro = $sql->errorInfo();
+            echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+        }else{
+            $rs = $sql->fetch();
+            return $rs['total'];
+        }
+    }
+
     public function aulasModulo($idModulo){
         $sql = $this->db->prepare("SELECT * 
                                      FROM `cursos_aulas` 
@@ -397,4 +446,33 @@ class Cursos extends Model{
             return $sql->fetchAll();
         }
     }
+
+    public function atualizaOrdem($idAula,$ordem){
+        $sql = $this->db->prepare("UPDATE `cursos_aulas`
+                                      SET `ordem`=:ordem 
+                                    WHERE `id`=:idAula");
+        $sql->bindValue(":ordem",$ordem);
+        $sql->bindValue(":idAula",$idAula);
+        if($sql->execute()===false){
+           $erro = $sql->errorInfo();
+           echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+        }else{
+            return $sql->fetchAll();
+        }
+    }
+
+    public function dadosProgramacao($idLive){
+        $sql = $this->db->prepare("SELECT * 
+                                     FROM `live_programacao`
+                                    WHERE `idLive`=:idLive");
+        $sql->bindValue(':idLive',$idLive);
+        if($sql->execute()===false){
+            $error = $sql->errorInfo();
+            print '<small class="text-danger"><i class="fas fa-times"></i> "'.$error[2].'"</small><br/>';
+        }
+        return $sql->fetch();
+    }
+
+   
+
 }

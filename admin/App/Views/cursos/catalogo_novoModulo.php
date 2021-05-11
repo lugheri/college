@@ -59,8 +59,8 @@
                             <div class="col">
                                 <label for="tipo">Tipo</label>
                                 <select name="tipo" id="tipo" class="form-control">
-                                    <option value="modulo" <?php if($tipo=="modulo"){ echo "selected";}?> >Módulo</option>
-                                    <option value="bonus" <?php if($tipo=="bonus"){ echo "selected";}?> >Bônus</option>
+                                    <option value="Módulo" <?php if($tipo=="modulo"){ echo "selected";}?> >Módulo</option>
+                                    <option value="Bônus" <?php if($tipo=="bonus"){ echo "selected";}?> >Bônus</option>
                                 </select>
                             </div>
                         </div>

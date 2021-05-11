@@ -84,26 +84,24 @@
                             </div>
                     <?php endif;?>
 
-                    <div class="card-body ">
-                        <?php if($mc['modulo']):?>
+                        <div class="card-body">
+                            <?php if($mc['tipo_modulo']=="Módulo"):?>
                                 <i class="fas fa-folder text-danger"></i>
+                            <?php else:?>
+                                <i class="fas fa-gift text-danger"></i>
                             <?php endif;?>
                             <p title="<?= $mc['modulo']?>"><?= $this->resumeText($mc['modulo'],3)?></p>
-                            <small title="<?= $mc['descricao']?>">
-                                <?php if(empty($mc['descricao'])){
-                                    echo 'Sem Descrição';
-                                }else{ 
-                                    echo $this->resumeText($mc['descricao'],3);
-                                }?>
+                            <small>
+                                <?= $this->totalAulasModulo($mc['id'])?> Aula(S)
                             </small>
                             <?php 
                             $linkModulo= base64_encode($mc['id'].':modulo');?>
+                           
                             <a href="<?= BASE_URL."cursos/modulo/".$linkModulo ?>"
-                               class="btn btn-create btn-block btn-outline-danger btn-sm">
+                            class="btn btn-create btn-block btn-outline-danger btn-sm">
                                 Ver Aulas
                             </a>
-                        </div>    
-                        
+                        </div>
                     </div>
                 </div>
             <?php endforeach;?>

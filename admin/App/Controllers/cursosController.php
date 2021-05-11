@@ -172,6 +172,12 @@ class cursosController extends Controller{
         echo "<script>window.location.href='".BASE_URL."cursos/modulo/".$linkModulo."'</script>";
     }
 
+    public function totalAulasModulo($idModulo){
+        $c = new Cursos();
+
+        return $c->totalAulasModulo($idModulo);
+    }
+
     public function modulo($idModulo){
         $data['moduloAtivo']=$this->modulo_ativo;
         $data['telaAtual']='catalogo_abrirModulo';
@@ -185,5 +191,64 @@ class cursosController extends Controller{
 
         $this->loadTemplate($this->modulo_ativo.'/'.$data['telaAtual'],$data);
     }
+
+    public function editarModulo(){
+        $c = new Cursos();
+
+        $data['infoModulo']=$c->infoModulo($_POST['idModulo']);
+        $this->loadView($this->modulo_ativo.'/catalogo_editarModulo',$data); 
+    }
+
+    public function removerModulo(){
+        $c = new Cursos();
+        if($_POST['acao']=="perguntar"){
+            $data['infoModulo']=$c->infoModulo($_POST['idModulo']);
+            $this->loadView($this->modulo_ativo.'/catalogo_removerModulo',$data);
+            
+        }else if($_POST['acao']=="remover"){   
+            $infoModulo=$c->infoModulo($_POST['idModulo']);     
+            $c->removerModulo($_POST['idModulo']);
+            $linkCurso = base64_encode($infoModulo['idCurso'].':curso');
+            echo "<script>window.location.href='".BASE_URL."cursos/editar/".$linkCurso."'</script>";
+        }
+    }
+
+    
+    public function salvarAlteracoesModulo(){
+        $c = new Cursos();
+        $c->salvarAlteracoesModulo($_POST);
+
+        $linkModulo = base64_encode($_POST['idModulo'].':modulo');
+        echo "<script>window.location.href='".BASE_URL."cursos/modulo/".$linkModulo."'</script>";
+    }
+
+    public function reordenaAula(){
+        $c = new Cursos();
+        $ordem=$_POST['ordem'];
+        $ordemModulo=$_POST['ordemModulo']*100;
+        $idCurso=$_POST['idCurso'];
+        $idModulo=$_POST['idModulo'];
+
+        $i=0;
+        foreach ($ordem as $idAula):
+            $ordem=$ordemModulo+$i;
+            $c->atualizaOrdem($idAula,$ordem);
+            $i++;
+        endforeach;
+       
+        $data['infoModulo']=$c->infoModulo($idModulo);
+        $data['aulasModulo']=$c->aulasModulo($idModulo);
+
+        $this->loadView($this->modulo_ativo.'/listaAulas_modulo',$data);
+
+        
+    }
+
+    //dados da programacao
+    public function dadosProgramacao($idLive){
+        $c = new Cursos();
+        return $c->dadosProgramacao($idLive);
+    }
+
 
 }

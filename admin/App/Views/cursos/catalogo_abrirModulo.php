@@ -15,7 +15,16 @@
    </div>
 </div> 
 
-<div class="row align-items-end">
+<div class="row align-items-center">
+    <div class="col-2 text-center">
+        <?php if($infoModulo['tipo_modulo']=="Módulo"):?>
+            <i class="h1 fas fa-folder"></i>
+            <p class="h5">Módulo</p>
+        <?php else:?>
+            <i class="h1 fas fa-gift"></i>
+            <p class="h5">Bônus</p>
+        <?php endif;?>
+    </div>
     <div class="col" style="border-left:1px solid #ccc">
         
         <div class="row align-items-end">
@@ -39,23 +48,7 @@
 </div>
 <br/>
 <div class="card">
-    <div class="card-body">
-        <div class="row align-items-center">
-            <div class="col">
-                <p><?= count($aulasModulo).' Aula(s)'?></p>
-            </div>
-            <div class="col text-right">
-                <div class="btn btn-danger btn-create" onClick="novaAula('<?= $infoModulo['id']?>','selecionar')">
-                    <i class="fas fa-plus"></i> Criar nova aula
-                </div>
-            </div>
-        </div>
-       
-        <div class="row align-items-center">
-            <?php foreach($aulasModulo as $am):?>
-                dados da aula <?= $am['nome']?> <br/>
-            <?php endforeach;?>
-        </div>
-
+    <div class="card-body" id='reordena'>
+        <?php require 'listaAulas_modulo.php'?>
     </div>
 </div>
