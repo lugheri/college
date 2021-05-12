@@ -18,10 +18,10 @@
 <div class="row align-items-center">
     <div class="col-2 text-center">
         <?php if($infoModulo['tipo_modulo']=="Módulo"):?>
-            <i class="h1 fas fa-folder"></i>
+            <i class="h1 text-danger fas fa-folder"></i>
             <p class="h5">Módulo</p>
         <?php else:?>
-            <i class="h1 fas fa-gift"></i>
+            <i class="h1 text-danger fas fa-gift"></i>
             <p class="h5">Bônus</p>
         <?php endif;?>
     </div>

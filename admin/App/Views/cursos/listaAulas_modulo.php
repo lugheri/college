@@ -3,9 +3,10 @@
         <p class="h4"><?= count($aulasModulo).' Aula(s)'?></p>
     </div>
     <div class="col text-right">
-        <div class="btn btn-danger btn-create" onClick="novaAula('<?= $infoModulo['id']?>','selecionar')">
+        <?php $idModulo = base64_encode($infoModulo['id'].':modulo');?>
+        <a class="btn btn-danger btn-create" href="<?= BASE_URL.'cursos/criarAula/'.$idModulo?>">
             <i class="fas fa-plus"></i> Criar nova aula
-        </div>
+        </a>
     </div>
 </div>
 <br/>
@@ -14,6 +15,10 @@
         <div class="col-10 offset-1 text-center">
             <i class="h1 far fa-folder-open"></i>
             <p class="h4">Nenhuma aula cadastrada neste módulo!</p>
+            <a class="btn btn-outline-danger btn-create" href="<?= BASE_URL.'cursos/criarAula/'.$idModulo?>">
+                <i class="fas fa-plus"></i> Criar nova aula
+            </a>
+    </div>
         </div>
     <?php else:?>
         <div class="col-12">
@@ -124,7 +129,8 @@
                                                         </div>
                                                         <div class="row">
                                                             <div class="col">
-                                                                <a href="https://app.otraderquemultiplica.com.br/admin/cursos/edicaoAula/NTc6MTI=" class="btn btn-info btn-sm" style="margin-top:5px">
+                                                                <?php $linkAula = base64_encode($am['id'].':aula')?>
+                                                                <a href="<?= BASE_URL.'cursos/abrirAula/'.$linkAula?>" class="btn btn-info btn-sm" style="margin-top:5px">
                                                                     <i class="fas fa-edit" aria-hidden="true"></i> Editar Aula
                                                                 </a>
                                                             </div>

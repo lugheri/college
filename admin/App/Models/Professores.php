@@ -10,7 +10,7 @@ class Professores extends Model{
                                      ORDER BY `id` DESC");            
         }else{
             $sql = $this->db->prepare("SELECT * 
-                                         FROM `cursos` 
+                                         FROM `cursos_professores` 
                                         WHERE `status`=:st
                                      ORDER BY `id` DESC");
             $sql->bindValue(":st",$status);

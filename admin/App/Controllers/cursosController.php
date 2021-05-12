@@ -76,6 +76,11 @@ class cursosController extends Controller{
         $c = new Cursos();
         return $c->nomeCurso($idCurso);
     }
+
+    public function nomeModulo($idModulo){
+        $c = new Cursos();
+        return $c->nomeModulo($idModulo);
+    }
     
     public function nomeAula($idAula){
         $c = new Cursos();
@@ -250,5 +255,51 @@ class cursosController extends Controller{
         return $c->dadosProgramacao($idLive);
     }
 
+    
 
+    public function criarAula($idModulo = ""){
+        $p = new Professores();
+        $c = new Cursos();
+        $data['moduloAtivo']=$this->modulo_ativo;
+        $data['telaAtual']='catalogo_criarAula';
+        $idM=explode(':',base64_decode($idModulo));
+        $data['idModulo']=$idM[0];
+
+        
+
+        //Fases do Cadastro
+        $data['fases'] = array(
+            '<i class="fas fa-info"></i> Informações',
+            '<i class="fas fa-video"></i> Conteúdo',
+            '<i class="fas fa-file-alt"></i> Descrição',
+            '<i class="fas fa-paperclip"></i> Material de Apoio/anexos',
+            '<i class="fas fa-calendar-check"></i> Agendamento',
+            '<i class="fas fa-check"></i> Confirmação');
+        
+        if(empty($_POST)){    
+            //Fase atual
+            $data['faseAtual']=0;
+            $data['professores'] = $p->listarProfessores(1);
+            $data['idCurso'] = $c->idCurso_byModulo($idM[0]);
+            $data['ordem'] = $c->ordemPxAula($idM[0]);
+            $this->loadTemplate($this->modulo_ativo.'/'.$data['telaAtual'],$data);
+        }else{
+           
+            $data['faseAtual']=$_POST['faseAtual']+1;
+            $data['idAula']=$c->criarAula($_POST);
+
+            $this->loadView($this->modulo_ativo.'/'.$data['telaAtual'],$data);
+        }        
+    }
+
+    public function abrirAula($idAula){
+        $data['moduloAtivo']=$this->modulo_ativo;
+        $data['telaAtual']='catalogo_abrirAula';
+
+        $c = new Cursos();
+        $idA=explode(':',base64_decode($idAula));
+        $data['infoAula']=$c->infoAula($idA[0]);
+
+        $this->loadTemplate($this->modulo_ativo.'/'.$data['telaAtual'],$data);  
+    }
 }

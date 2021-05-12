@@ -293,3 +293,30 @@ function salvarAlteracoesModulo(){
 		})
 	});
 }
+
+//Nova Aulas
+function criarAula(){
+    $('#form_novaAula').on('submit', function(e){
+		e.preventDefault();
+
+		var form  = $('#form_novaAula')['0'];
+		var data = new FormData(form);
+		$.ajax({
+			type:"POST",
+			data:data,
+			contentType:false,
+			processData:false,
+            url:RAIZ+"cursos/criarAula",
+			dataType: "html",
+			beforeSend:function(){
+				$('#conteudo').html('');	
+				$('#conteudo').append("<div class='modal-body text-center'><i class='text-info fas fa-circle-notch fa-spin'></i><p>Cadastrando Curso</p> </div>");
+			},
+            success:function(result){
+				$('#conteudo').html('');	
+				$('#conteudo').append(result);
+        	}
+			
+		})
+	});
+}
