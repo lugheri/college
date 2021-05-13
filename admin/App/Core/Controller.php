@@ -4,6 +4,7 @@ use Core\Models;
 use Models\Usuarios;
 use Models\Modules;
 use Models\Biblioteca;
+use Models\Editor;
 
 class Controller{
 
@@ -81,6 +82,11 @@ class Controller{
         endif;
         return $text;
 
+    }
+
+    public function listarFontes(){
+        $e = new Editor;
+        return $e->fontes();        
     }
 
     

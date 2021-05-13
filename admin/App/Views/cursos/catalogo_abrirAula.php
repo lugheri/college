@@ -50,19 +50,25 @@
     </div>
 </div>
 <br/>
-VIDEO
+<?php if($infoAula['tipoConteudo']=="video"):?>
+    VIDEO
 
-Edição do video
-Adição de Materiais
-Inclusao de links
-Edição avançada de texto
-Agendamento de liberacao da aula
+    Edição do video
+    Adição de Materiais
+    Inclusao de links
+    Edição avançada de texto
+    Agendamento de liberacao da aula
+<?php elseif($infoAula['tipoConteudo']=="Prova"):?>
+    PROVA
+    edicao das informacoes
+    tempo de prova
+    tipo de nota
+    Agendamento de liberacao da prova
+<?php elseif($infoAula['tipoConteudo']=="LIVE"):?>
+    live
+    Live Director
+<?php endif;?>
 
-PROVA
-edicao das informacoes
-tempo de prova
-tipo de nota
-Agendamento de liberacao da prova
 
-live
-Live Director
+
+

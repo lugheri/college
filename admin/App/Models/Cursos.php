@@ -516,7 +516,7 @@ class Cursos extends Model{
 
    
     public function criarAula($dados){
-        if($dados['faseAtual']==0){//Cadastra atualizacoes
+        if($dados['faseAtual']==0){//Informacoes
             $sql = $this->db->prepare("INSERT INTO `cursos_aulas` 
                                                  (`idCurso`,`idModulo`,`dataCriacao`,`tipoAula`,`idProfessor`,`tipoConteudo`,`capa`,`nome`,`descricao`,`tags`,`ordem`,`visibilidade`,`status`)
                                           VALUES (:idCurso,:idModulo,now(),:tipoAula,:idProfessor,:tipoConteudo,0,:nome,:descricao,:tags,:ordem,0,1)");
@@ -536,54 +536,103 @@ class Cursos extends Model{
                 return $this->db->lastInsertId();
              }
         }
-        if($dados['faseAtual']==1){//Cadastra atualizacoes
-            $sql = $this->db->prepare("UPDATE `cursos`
-                                          SET `autor`=:autor,
-                                              `tags`=:tags
-                                        WHERE `id`=:idCurso");
-            $sql->bindValue(":autor",$dados['autor']);
-            $sql->bindValue(":tags",$dados['tags']);
-            $sql->bindValue(":idCurso",$dados['idCurso']);
+        if($dados['faseAtual']==1){//Conteudo
+            $sql = $this->db->prepare("UPDATE `cursos_aulas`
+                                          SET `link`=:linkVideo,
+                                              `plataforma_video`=:plataforma
+                                        WHERE `id`=:idAula");
+            $sql->bindValue(":linkVideo",$dados['linkVideo']);
+            $sql->bindValue(":plataforma",$dados['plataforma']);
+            $sql->bindValue(":idAula",$dados['idAula']);
             if($sql->execute()===false){
                $erro = $sql->errorInfo();
                echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
             }else{
-                return $dados['idCurso'];
+                return $dados['idAula'];
             }
         }
 
-        if($dados['faseAtual']==2){//salva capa
-            $sql = $this->db->prepare("UPDATE `cursos`
-                                          SET `capa`=:capa
-                                        WHERE `id`=:idCurso");
-            $sql->bindValue(":capa",$dados['capa']);
-            $sql->bindValue(":idCurso",$dados['idCurso']);
+        if($dados['faseAtual']==2){//Descricao
+            $sql = $this->db->prepare("UPDATE `cursos_aulas`
+                                          SET `descricao`=:descricao
+                                        WHERE `id`=:idAula");
+            $sql->bindValue(":descricao",$dados['texto_editor']);
+            $sql->bindValue(":idAula",$dados['idAula']);
             if($sql->execute()===false){
                $erro = $sql->errorInfo();
                echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
             }else{
-                return $dados['idCurso'];
+                return $dados['idAula'];
             }
         }
 
-        if($dados['faseAtual']==3){//confirma
-            $sql = $this->db->prepare("UPDATE `cursos`
-                                          SET `capa`=:capa,
+        if($dados['faseAtual']==3){//agendamento
+            $sql = $this->db->prepare("SELECT `id` FROM `cursos_liberacao_aulas` WHERE `idAula`=:idAula");
+            $sql->bindValue(":idAula",$dados['idAula']);
+            if($sql->execute()===false){
+                $erro = $sql->errorInfo();
+                echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+             }else{
+                if($sql->rowCount()==0){
+                    $sql = $this->db->prepare("INSERT INTO `cursos_liberacao_aulas`
+                                                           (`idAula`,`regraLiberacao`,`diasLiberacao`,`dataLiberacao`)
+                                                    VALUES (:idAula,:regra,:dias,:dataLiberacao)");
+                }else{
+                    $sql = $this->db->prepare("UPDATE `cursos_liberacao_aulas`
+                                                  SET `regraLiberacao`=:regra,
+                                                      `diasLiberacao`=:dias,
+                                                      `dataLiberacao`=:dataLiberacao
+                                                WHERE `idAula`=:idAula");
+                }                
+                $sql->bindValue(":regra",$dados['regra']);
+                if($dados['regra']=='D'):
+                    $sql->bindValue(":dias",$dados['dias']);
+                    $sql->bindValue(":dataLiberacao",date('Y-m-d'));
+                elseif($dados['regra']=='F'):
+                    $sql->bindValue(":dias",0);
+                    $sql->bindValue(":dataLiberacao",$dados['dataLiberacao']);
+                else:
+                    $sql->bindValue(":dias",0);
+                    $sql->bindValue(":dataLiberacao",date('Y-m-d'));
+                endif;
+                $sql->bindValue(":idAula",$dados['idAula']);
+                if($sql->execute()===false){
+                    $erro = $sql->errorInfo();
+                    echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+                }else{
+                    return $dados['idAula'];
+                }
+            }
+        }        
+        
+
+        if($dados['faseAtual']==4){//confirma
+            $sql = $this->db->prepare("UPDATE `cursos_aulas`
+                                          SET `idProfessor`=:idProfessor,
+                                              `tipoConteudo`=:tipoConteudo,
                                               `nome`=:nome,
                                               `descricao`=:descricao,
                                               `tags`=:tags,
-                                              `concluido`=1
-                                        WHERE `id`=:idCurso");
-            $sql->bindValue(":capa",$dados['capa']);
+                                              `link`=:linkVideo,
+                                              `plataforma_video`=:plataforma
+                                        WHERE `id`=:idAula");
+            //Informações
+            $sql->bindValue(":idProfessor",$dados['professor']);
+            $sql->bindValue(":tipoConteudo",$dados['tipoConteudo']);
             $sql->bindValue(":nome",$dados['nome']);
-            $sql->bindValue(":descricao",$dados['descricao']);
             $sql->bindValue(":tags",$dados['tags']);
-            $sql->bindValue(":idCurso",$dados['idCurso']);
+            //Conteudo
+            $sql->bindValue(":linkVideo",$dados['linkVideo']);
+            $sql->bindValue(":plataforma",$dados['plataforma']);
+            //Descricao
+            $sql->bindValue(":descricao",$dados['texto_editor']);
+            //idAula
+            $sql->bindValue(":idAula",$dados['idAula']);
             if($sql->execute()===false){
                $erro = $sql->errorInfo();
-               echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: "'.$erro[2].'" </small><br/>';
+               echo '<small class="text-danger"><i class="fas fa-times"></i> Erro de dados: Confirmacao"'.$erro[2].'" </small><br/>';
             }else{
-                return $dados['idCurso'];
+                return $dados['idAula'];
             }
         }
     }

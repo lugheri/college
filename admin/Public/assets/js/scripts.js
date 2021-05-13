@@ -320,3 +320,34 @@ function criarAula(){
 		})
 	});
 }
+
+function loadVideo(linkVideo){
+    $.ajax({
+        type: "POST",
+        data:{linkVideo},
+        url:RAIZ+"cursos/loadVideo",
+        dataType:"html",
+        beforeSend:function(){
+            $('#loadVideo').html('');	
+            $('#loadVideo').append("<div class='modal-body text-center'><i class='h4 text-info fas fa-circle-notch fa-spin'></i><p>Carregando informações do vídeo</p> </div>");
+        },
+        success:function(result){
+            $('#loadVideo').html('');
+            $('#loadVideo').append(result);
+        }
+    })
+}
+
+function selRegraLiberacao(regra){
+    $.ajax({
+        type: "POST",
+        data:{regra},
+        url:RAIZ+"cursos/selRegraLiberacao",
+        dataType:"html",       
+        success:function(result){
+            $('#regraSelecionada').html('');
+            $('#regraSelecionada').append(result);
+        }
+    })
+}
+

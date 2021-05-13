@@ -81,6 +81,11 @@ class cursosController extends Controller{
         $c = new Cursos();
         return $c->nomeModulo($idModulo);
     }
+
+    public function infoAula($idAula){
+        $c = new Cursos();
+        return $c->infoAula($idAula);
+    }
     
     public function nomeAula($idAula){
         $c = new Cursos();
@@ -249,7 +254,7 @@ class cursosController extends Controller{
         
     }
 
-    //dados da programacao
+    //dados da programacao //FUNCAO PENDENTE DE VERIFICACAO
     public function dadosProgramacao($idLive){
         $c = new Cursos();
         return $c->dadosProgramacao($idLive);
@@ -272,7 +277,6 @@ class cursosController extends Controller{
             '<i class="fas fa-info"></i> Informações',
             '<i class="fas fa-video"></i> Conteúdo',
             '<i class="fas fa-file-alt"></i> Descrição',
-            '<i class="fas fa-paperclip"></i> Material de Apoio/anexos',
             '<i class="fas fa-calendar-check"></i> Agendamento',
             '<i class="fas fa-check"></i> Confirmação');
         
@@ -291,6 +295,56 @@ class cursosController extends Controller{
             $this->loadView($this->modulo_ativo.'/'.$data['telaAtual'],$data);
         }        
     }
+
+    public function loadVideo(){
+         $link = $_POST['linkVideo'];
+
+        //verificando a plataforma
+		if(strpos($link, 'youtube') == true){
+			$params=explode("v=", $link);
+			if(!empty($params[1])){
+				$id=explode("&", $params[1]);
+				$data['plataforma']='youtube';
+				$data['idVideo']=$id[0];
+			}else{
+				$data['plataforma']='';
+				$data['idVideo']='';
+			}
+			
+		}else if(strpos($link, 'youtu.be') == true){
+			$params=explode("be/", $link);
+			if(!empty($params[1])){
+				$data['plataforma']='youtube';
+				$data['idVideo']=$params[1];
+			}else{
+				$data['plataforma']='';
+				$data['idVideo']='';
+			}
+			
+		}else if(strpos($link, 'vimeo')== true){
+			$params=explode("com/", $link);
+			if(!empty($params[1])){
+				$data['plataforma']='vimeo';
+				$data['idVideo']=$params[1];
+			}else{
+				$data['plataforma']='';
+				$data['idVideo']='';
+			}	
+		}else{
+			$data['plataforma']='';
+			$data['idVideo']='';
+		}
+
+        $this->loadView($this->modulo_ativo.'/catalogo_loadVideo',$data);
+
+    }
+
+    public function selRegraLiberacao(){
+        $data['regra'] = $_POST['regra'];
+
+        $this->loadView($this->modulo_ativo.'/catalogo_selRegraLiberacao',$data);
+    }
+
 
     public function abrirAula($idAula){
         $data['moduloAtivo']=$this->modulo_ativo;
