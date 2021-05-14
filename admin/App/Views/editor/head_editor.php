@@ -62,7 +62,7 @@
 }
 
 .box-editor{
-  min-height: 100px;
+  min-height: 250px;
   padding: 5px;
   background: #fff;
 }

@@ -339,11 +339,71 @@ class cursosController extends Controller{
 
     }
 
+    public function salvarNome(){        
+        $c = new Cursos();
+        $c->salvarNome($_POST['idAula'],$_POST['nome']);
+        echo "<div id='msg_slv'><b class='text-success'><i class='fas fa-save'></i> Nome salvo com sucesso!</b>";
+    }
+    
+    public function loadNovoVideo(){
+        $link = $_POST['linkVideo'];
+
+       //verificando a plataforma
+       if(strpos($link, 'youtube') == true){
+           $params=explode("v=", $link);
+           if(!empty($params[1])){
+               $id=explode("&", $params[1]);
+               $data['plataforma']='youtube';
+               $data['idVideo']=$id[0];
+           }else{
+               $data['plataforma']='';
+               $data['idVideo']='';
+           }
+           
+       }else if(strpos($link, 'youtu.be') == true){
+           $params=explode("be/", $link);
+           if(!empty($params[1])){
+               $data['plataforma']='youtube';
+               $data['idVideo']=$params[1];
+           }else{
+               $data['plataforma']='';
+               $data['idVideo']='';
+           }
+           
+       }else if(strpos($link, 'vimeo')== true){
+           $params=explode("com/", $link);
+           if(!empty($params[1])){
+               $data['plataforma']='vimeo';
+               $data['idVideo']=$params[1];
+           }else{
+               $data['plataforma']='';
+               $data['idVideo']='';
+           }	
+       }else{
+           $data['plataforma']='';
+           $data['idVideo']='';
+       }
+
+       $this->loadView($this->modulo_ativo.'/catalogo_loadNovoVideo',$data);
+
+   }
+
+   public function salvarNovoVideo(){
+        $c = new Cursos();
+        $idAula = $_POST['idAula'];
+        $idVideo = $_POST['idVideo'];
+        $plataforma = $_POST['plataforma'];
+        $c->salvarNovoVideo($idAula,$idVideo,$plataforma);
+        $linkAula= base64_encode($idAula.':aula');
+        echo "<script>window.location.href='".BASE_URL."cursos/abrirAula/".$linkAula."'</script>";
+   }
+
     public function selRegraLiberacao(){
         $data['regra'] = $_POST['regra'];
 
         $this->loadView($this->modulo_ativo.'/catalogo_selRegraLiberacao',$data);
     }
+    
 
 
     public function abrirAula($idAula){
@@ -353,7 +413,47 @@ class cursosController extends Controller{
         $c = new Cursos();
         $idA=explode(':',base64_decode($idAula));
         $data['infoAula']=$c->infoAula($idA[0]);
+        $data['agendamentoAula']=$c->agendamentoAula($idA[0]);
 
         $this->loadTemplate($this->modulo_ativo.'/'.$data['telaAtual'],$data);  
+    }
+
+    public function alterarVideo(){
+        $c = new Cursos();
+        $data['idAula'] = $_POST['idAula'];
+
+        $this->loadView($this->modulo_ativo.'/catalogo_alterarVideoAula',$data);
+    }
+
+    public function alterarRegraAula(){
+        $c = new Cursos();
+        $data['idAula'] = $_POST['idAula'];
+        $data['agendamentoAula']=$c->agendamentoAula($_POST['idAula']);
+
+        $this->loadView($this->modulo_ativo.'/catalogo_alteraRegraLiberacao',$data);
+    }
+
+    public function salvarRegraAula(){
+        $c = new Cursos();
+        $idAula = $_POST['idAula'];
+        $regra = $_POST['regra'];
+        $dias = $_POST['dias'];
+        $dataLiberacao = $_POST['dataLiberacao'];
+        $c->salvarRegraAula($idAula,$regra,$dias,$dataLiberacao);
+        $linkAula= base64_encode($idAula.':aula');
+        echo "<script>window.location.href='".BASE_URL."cursos/abrirAula/".$linkAula."'</script>";
+
+    }
+
+    public function salvaDescricaoAula(){        
+        $c = new Cursos();
+        $c->salvaDescricaoAula($_POST['idAula'],$_POST['descricao']);
+        echo "<div id='msg_slv'><b class='text-success'><i class='fas fa-save'></i> Descrição salva com sucesso!</b>";
+    }
+
+    public function setVisibilidadeAula(){
+        $c = new Cursos();
+        $c->setVisibilidadeAula($_POST['idAula'],$_POST['visibilidade']);
+        $this->loadView($this->modulo_ativo.'/catalogo_setVisibilidadeAula',$_POST);
     }
 }

@@ -351,3 +351,196 @@ function selRegraLiberacao(regra){
     })
 }
 
+
+/*Tela de abrir curso */
+function salvarNome(idAula){
+    let nome = document.getElementById('nome').value
+    $.ajax({
+        type: "POST",
+        data:{idAula,nome},
+        url:RAIZ+"cursos/salvarNome",
+        dataType:"html",       
+        beforeSend:function(){
+            $('#salvaNome').html('');	
+            $('#salvaNome').append("<div class='modal-body text-center'><i class='h4 text-success fas fa-save'></i><p>Nome gravada</p></div>");
+        },
+        success:function(result){
+            $('#salvaNome').html('');
+            $('#salvaNome').append(result);
+        }
+    })
+
+}
+//Alterar Video
+function alterarVideo(idAula){
+    $.ajax({
+        type: "POST",
+        data:{idAula},
+        url:RAIZ+"cursos/alterarVideo",
+        dataType:"html",
+        success:function(result){
+            $('#content-modal').html('');
+            $('#content-modal').append(result);
+
+            //removendo outras possiveis classes de tamanho
+			$('.modal-dialog').removeClass('modal-sm');//Pequeno
+			$('.modal-dialog').removeClass('modal-lg');//Grande
+            $('.modal-dialog').removeClass('modal-xl');//Muito Grande
+            
+            $('.modal-dialog').addClass('modal-lg');
+
+            $('#modal').modal({
+				backdrop: 'static'
+			})
+
+            $('#modal').modal('show');
+        }
+    })
+}
+
+function loadNovoVideo(linkVideo){
+    $.ajax({
+        type: "POST",
+        data:{linkVideo},
+        url:RAIZ+"cursos/loadNovoVideo",
+        dataType:"html",
+        beforeSend:function(){
+            $('#loadVideo').html('');	
+            $('#loadVideo').append("<div class='modal-body text-center'><i class='h4 text-info fas fa-circle-notch fa-spin'></i><p>Carregando informações do vídeo</p> </div>");
+        },
+        success:function(result){
+            $('#loadVideo').html('');
+            $('#loadVideo').append(result);
+        }
+    })
+}
+
+function salvarNovoVideo(idVideo,plataforma){
+    let idAula = document.getElementById('idAula').value
+    $.ajax({
+        type: "POST",
+        data:{idAula,idVideo,plataforma},
+        url:RAIZ+"cursos/salvarNovoVideo",
+        dataType:"html",
+        success:function(result){
+            $('#content-modal').html('');
+            $('#content-modal').append(result);
+
+            //removendo outras possiveis classes de tamanho
+			$('.modal-dialog').removeClass('modal-sm');//Pequeno
+			$('.modal-dialog').removeClass('modal-lg');//Grande
+            $('.modal-dialog').removeClass('modal-xl');//Muito Grande
+            
+            $('.modal-dialog').addClass('modal-lg');
+
+            $('#modal').modal({
+				backdrop: 'static'
+			})
+
+            $('#modal').modal('hide');
+        }
+    })
+}
+
+//Regra Aula
+function alterarRegraAula(idAula){
+    $.ajax({
+        type: "POST",
+        data:{idAula},
+        url:RAIZ+"cursos/alterarRegraAula",
+        dataType:"html",
+        success:function(result){
+            $('#content-modal').html('');
+            $('#content-modal').append(result);
+
+            //removendo outras possiveis classes de tamanho
+			$('.modal-dialog').removeClass('modal-sm');//Pequeno
+			$('.modal-dialog').removeClass('modal-lg');//Grande
+            $('.modal-dialog').removeClass('modal-xl');//Muito Grande
+            
+            $('.modal-dialog').addClass('modal-lg');
+
+            $('#modal').modal({
+				backdrop: 'static'
+			})
+
+            $('#modal').modal('show');
+        }
+    })
+}
+
+function salvarRegraAula(idAula){
+    let regra = document.getElementById('regra').value
+    if(regra=="L"){
+        dias=""
+        dataLiberacao=""
+    }
+    if(regra=="D"){
+        dias=document.getElementById('dias').value
+        dataLiberacao=""
+    }
+    if(regra=="F"){
+        dias=""
+        dataLiberacao=document.getElementById('dataLiberacao').value   
+    }
+
+    $.ajax({
+        type: "POST",
+        data:{idAula,regra,dias,dataLiberacao},
+        url:RAIZ+"cursos/salvarRegraAula",
+        dataType:"html",
+        success:function(result){
+            $('#content-modal').html('');
+            $('#content-modal').append(result);
+
+            //removendo outras possiveis classes de tamanho
+			$('.modal-dialog').removeClass('modal-sm');//Pequeno
+			$('.modal-dialog').removeClass('modal-lg');//Grande
+            $('.modal-dialog').removeClass('modal-xl');//Muito Grande
+            
+            $('.modal-dialog').addClass('modal-lg');
+
+            $('#modal').modal({
+				backdrop: 'static'
+			})
+
+            $('#modal').modal('hide');
+        }
+    })
+}
+
+//Descricao
+function salvarDescricao(idAula){
+    let descricao = document.getElementById('texto_editor').value
+    $.ajax({
+        type: "POST",
+        data:{idAula,descricao},
+        url:RAIZ+"cursos/salvaDescricaoAula",
+        dataType:"html",       
+        beforeSend:function(){
+            $('#descricao').html('');	
+            $('#descricao').append("<div class='modal-body text-center'><i class='h4 text-success fas fa-save'></i><p>Descrição gravada</p></div>");
+        },
+        success:function(result){
+            $('#descricao').html('');
+            $('#descricao').append(result);
+        }
+    })
+}
+
+//Materiais
+
+//Visibilidade
+function setVisibilidadeAula(idAula,visibilidade){
+    $.ajax({
+        type: "POST",
+        data:{idAula,visibilidade},
+        url:RAIZ+"cursos/setVisibilidadeAula",
+        dataType:"html",       
+        success:function(result){
+            $('#visibilidadeAula').html('');
+            $('#visibilidadeAula').append(result);
+        }
+    })
+}
+
